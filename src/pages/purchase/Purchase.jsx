@@ -63,10 +63,12 @@ export default function Purchase() {
     }
   };
 
-  const filtered = purchases.filter(p => 
-    p.wholesalerName?.toLowerCase().includes(search.toLowerCase()) ||
-    p.flowerName?.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = purchases.filter(p => {
+    const wholesalerName = p.wholesalerId?.name || p.wholesalerName || '';
+    const flowerName = p.flowerId?.flowerName || p.flowerName || '';
+    return wholesalerName.toLowerCase().includes(search.toLowerCase()) ||
+           flowerName.toLowerCase().includes(search.toLowerCase());
+  });
 
   return (
     <div className="space-y-6">
@@ -108,10 +110,10 @@ export default function Purchase() {
             </thead>
             <tbody className="divide-y divide-white/50">
               {filtered.map((item) => (
-                <tr key={item.id} className="hover:bg-white/40 transition-colors">
+                <tr key={item._id || item.id} className="hover:bg-white/40 transition-colors">
                   <td className="px-6 py-4">{new Date(item.date).toLocaleDateString()}</td>
-                  <td className="px-6 py-4 font-medium text-slate-800">{t[item.wholesalerName] || item.wholesalerName || 'Unknown'}</td>
-                  <td className="px-6 py-4">{t[item.flowerName] || item.flowerName}</td>
+                  <td className="px-6 py-4 font-medium text-slate-800">{t[item.wholesalerId?.name] || item.wholesalerId?.name || item.wholesalerName || 'Unknown'}</td>
+                  <td className="px-6 py-4">{t[item.flowerId?.flowerName] || item.flowerId?.flowerName || item.flowerName}</td>
                   <td className="px-6 py-4 text-right font-medium text-mint-dark">{item.quantity} {t[item.unit] || item.unit}</td>
                   <td className="px-6 py-4 text-right">₹{item.totalAmount}</td>
                   <td className="px-6 py-4 text-right text-red-500 font-medium">₹{item.pendingAmount || 0}</td>

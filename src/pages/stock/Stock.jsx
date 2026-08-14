@@ -58,7 +58,10 @@ export default function Stock() {
     }
   };
 
-  const filtered = stockItems.filter(s => s.flowerName.toLowerCase().includes(search.toLowerCase()));
+  const filtered = stockItems.filter(s => {
+    const fname = s.flowerId?.flowerName || s.flowerName || '';
+    return fname.toLowerCase().includes(search.toLowerCase());
+  });
 
   return (
     <div className="space-y-6">
@@ -115,9 +118,11 @@ export default function Stock() {
                   status = t.status_inStock;
                 }
 
+                const fname = item.flowerId?.flowerName || item.flowerName;
+
                 return (
-                  <tr key={item.id} className="hover:bg-white/40 transition-colors">
-                    <td className="px-6 py-4 font-medium text-slate-800">{t[item.flowerName] || item.flowerName}</td>
+                  <tr key={item._id || item.id} className="hover:bg-white/40 transition-colors">
+                    <td className="px-6 py-4 font-medium text-slate-800">{t[fname] || fname}</td>
                     <td className="px-6 py-4 text-right font-medium text-mint-dark">{item.availableQuantity}</td>
                     <td className="px-6 py-4">
                       <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-100 text-slate-600 border border-slate-200">

@@ -30,7 +30,7 @@ export default function Sales() {
     setStockItems(await stockService.getAll());
   };
 
-  const getSelectedFlower = () => stockItems.find(s => s.id === formData.flowerId) || null;
+  const getSelectedFlower = () => stockItems.find(s => (s._id || s.id) === formData.flowerId) || null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,7 +58,7 @@ export default function Sales() {
         discount,
         finalAmount, // Backend expects finalAmount
         items: [{
-          flowerId: formData.flowerId,
+          flowerId: flower.flowerId?._id || flower.flowerId, // Pass the actual flower ID
           quantity: qty,
           sellingPrice: flower.sellingPrice
         }]
@@ -118,12 +118,12 @@ export default function Sales() {
             </thead>
             <tbody className="divide-y divide-white/50">
               {filtered.map((item) => (
-                <tr key={item.id} className="hover:bg-white/40 transition-colors">
+                <tr key={item._id || item.id} className="hover:bg-white/40 transition-colors">
                   <td className="px-6 py-4 font-medium text-slate-800">{item.billNumber}</td>
                   <td className="px-6 py-4">{t[item.customerName] || item.customerName}</td>
                   <td className="px-6 py-4 text-right font-medium">₹{item.totalAmount}</td>
                   <td className="px-6 py-4 text-right font-medium text-green-600">₹{item.paidAmount}</td>
-                  <td className="px-6 py-4 text-right text-red-500 font-medium">₹{item.balanceAmount}</td>
+                  <td className="px-6 py-4 text-right text-red-500 font-medium">₹{item.balanceAmount || 0}</td>
                   <td className="px-6 py-4 text-center">
                     <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-100 text-slate-600 border border-slate-200">
                       {item.paymentMethod}
@@ -162,9 +162,12 @@ export default function Sales() {
                   <label className="block text-sm font-medium text-slate-700 mb-1">{t.sales_selectFlower}</label>
                   <select required value={formData.flowerId} onChange={e => setFormData({...formData, flowerId: e.target.value})} className="glass-input">
                     <option value="">-- {t.sales_selectFlower} --</option>
-                    {stockItems.filter(s => s.availableQuantity > 0).map(s => (
-                      <option key={s.id} value={s.id}>{t[s.flowerName] || s.flowerName} (₹{s.sellingPrice}/{t[s.unit] || s.unit}) - {s.availableQuantity} available</option>
-                    ))}
+                    {stockItems.filter(s => s.availableQuantity > 0).map(s => {
+                      const fName = s.flowerId?.flowerName || s.flowerName || 'Unknown';
+                      return (
+                        <option key={s._id || s.id} value={s._id || s.id}>{t[fName] || fName} (₹{s.sellingPrice}/{t[s.unit] || s.unit}) - {s.availableQuantity} available</option>
+                      );
+                    })}
                   </select>
                 </div>
               </div>
