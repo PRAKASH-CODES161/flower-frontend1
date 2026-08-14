@@ -12,7 +12,7 @@ export default function Profile() {
     ownerName: '',
     mobileNumber: '',
     address: '',
-    image: ''
+    profileImage: ''
   });
   const [isEditing, setIsEditing] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
@@ -47,7 +47,7 @@ export default function Profile() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfile({ ...profile, image: reader.result });
+        setProfile({ ...profile, profileImage: reader.result });
       };
       reader.readAsDataURL(file);
     }
@@ -76,8 +76,8 @@ export default function Profile() {
       <div className="glass-card p-6 md:p-8">
         <div className="flex flex-col md:flex-row gap-8 mb-8 border-b border-white/40 pb-8">
           <div className="flex-shrink-0">
-            {profile.image ? (
-              <img src={profile.image} alt="Profile" className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover" />
+            {profile.profileImage ? (
+              <img src={profile.profileImage} alt="Profile" className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover" />
             ) : (
               <div className="w-32 h-32 bg-mint-light rounded-full border-4 border-white shadow-lg flex items-center justify-center text-mint-primary">
                 <Store className="w-16 h-16" />
