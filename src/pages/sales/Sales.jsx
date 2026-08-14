@@ -52,13 +52,16 @@ export default function Sales() {
       // Record sale matching backend expectation
       await salesService.create({
         customerName: formData.customerName || 'Walk-in Customer',
-        mobileNumber: formData.customerMobile, // Backend expects mobileNumber
+        mobileNumber: formData.customerMobile, 
         date: new Date().toISOString(),
         totalAmount,
         discount,
-        finalAmount, // Backend expects finalAmount
+        finalAmount, 
+        paidAmount,
+        balanceAmount: finalAmount - paidAmount,
+        paymentMethod: formData.paymentMethod || 'Cash',
         items: [{
-          flowerId: flower.flowerId?._id || flower.flowerId, // Pass the actual flower ID
+          flowerId: flower.flowerId?._id || flower.flowerId, 
           quantity: qty,
           sellingPrice: flower.sellingPrice
         }]
