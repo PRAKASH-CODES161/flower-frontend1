@@ -18,17 +18,20 @@ export const AuthProvider = ({ children }) => {
   const login = async (mobileNumber, password) => {
     const response = await authService.login(mobileNumber, password);
     localStorage.setItem('token', response.token);
-    localStorage.setItem('user', JSON.stringify(response.user));
-    setUser(response.user);
-    return response.user;
+    // response itself contains the user info (_id, name, mobileNumber)
+    const userData = { _id: response._id, name: response.name, mobileNumber: response.mobileNumber };
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
+    return userData;
   };
 
   const register = async (mobileNumber, password, name, shopName) => {
     const response = await authService.register(mobileNumber, password, name, shopName);
     localStorage.setItem('token', response.token);
-    localStorage.setItem('user', JSON.stringify(response.user));
-    setUser(response.user);
-    return response.user;
+    const userData = { _id: response._id, name: response.name, mobileNumber: response.mobileNumber };
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
+    return userData;
   };
 
   const logout = () => {
