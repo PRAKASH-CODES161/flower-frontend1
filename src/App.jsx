@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
 import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import AdminLayout from './components/layout/AdminLayout';
 import Dashboard from './pages/dashboard/Dashboard';
@@ -39,11 +40,7 @@ export default function App() {
         
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={
-          <div className="min-h-screen flex items-center justify-center bg-slate-50">
-            Registration Page - TODO
-          </div>
-        } />
+        <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         
         {/* Protected Routes */}
