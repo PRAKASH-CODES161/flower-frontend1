@@ -39,6 +39,7 @@ export default function Orders() {
     
     await orderService.create({
       ...formData,
+      flowerName: formData.flowerDetails || 'Garland', // map flowerDetails to flowerName
       quantity: Number(formData.quantity) || 1,
       orderTotal: total,
       advanceAmount: advance,
