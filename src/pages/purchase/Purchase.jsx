@@ -141,7 +141,7 @@ export default function Purchase() {
                 >
                   <option value="">-- {t.pur_wholesaler} --</option>
                   {wholesalers.map(w => (
-                    <option key={w.id} value={w.id}>{w.name}</option>
+                    <option key={w._id || w.id} value={w._id || w.id}>{w.name}</option>
                   ))}
                 </select>
               </div>

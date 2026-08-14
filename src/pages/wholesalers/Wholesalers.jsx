@@ -26,7 +26,7 @@ export default function Wholesalers() {
 
   const handleOpenModal = (wholesaler = null) => {
     if (wholesaler) {
-      setEditingId(wholesaler.id);
+      setEditingId(wholesaler._id || wholesaler.id);
       setFormData({
         name: wholesaler.name,
         mobileNumber: wholesaler.mobileNumber,
@@ -115,7 +115,7 @@ export default function Wholesalers() {
             <tbody className="divide-y divide-white/50">
               {filteredWholesalers.length > 0 ? (
                 filteredWholesalers.map((w) => (
-                  <tr key={w.id} className="hover:bg-white/40 transition-colors">
+                  <tr key={w._id || w.id} className="hover:bg-white/40 transition-colors">
                     <td className="px-6 py-4 font-medium text-slate-800">{w.name}</td>
                     <td className="px-6 py-4">
                       <div>{w.mobileNumber}</div>
@@ -127,7 +127,7 @@ export default function Wholesalers() {
                       <button onClick={() => handleOpenModal(w)} className="text-blue-500 hover:text-blue-700 transition-colors">
                         <Edit2 className="w-4 h-4" />
                       </button>
-                      <button onClick={() => handleDelete(w.id)} className="text-red-500 hover:text-red-700 transition-colors">
+                      <button onClick={() => handleDelete(w._id || w.id)} className="text-red-500 hover:text-red-700 transition-colors">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </td>
