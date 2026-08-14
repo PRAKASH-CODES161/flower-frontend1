@@ -36,26 +36,26 @@ export default function Purchase() {
     const price = Number(formData.pricePerUnit) || 0;
     const totalAmount = qty * price;
     try {
-      if (!formData.flowerId || !formData.wholesalerId) {
-        return alert("Please select a flower and wholesaler");
+      if (!formData.flowerName || !formData.wholesalerId) {
+        return alert("Please enter a flower name and select a wholesaler");
       }
 
       await purchaseService.create({
-        flowerId: formData.flowerId,
+        flowerName: formData.flowerName,
         wholesalerId: formData.wholesalerId,
-        quantity: Number(formData.quantity) || 0,
+        quantity: qty,
         unit: formData.unit,
-        purchasePrice: Number(formData.purchasePrice) || 0,
-        sellingPrice: Number(formData.sellingPrice) || 0,
-        totalAmount: Number(formData.totalAmount) || 0,
-        date: new Date(formData.date).toISOString()
+        purchasePrice: price,
+        sellingPrice: price * 1.5, // Auto-generate a selling price if not provided
+        totalAmount: totalAmount,
+        paidAmount: Number(formData.paidAmount) || 0,
+        date: new Date().toISOString()
       });
       await loadData();
       setShowModal(false);
       setFormData({
-        flowerId: '', wholesalerId: '', quantity: '', unit: 'kg',
-        purchasePrice: '', sellingPrice: '', totalAmount: '', paidAmount: '',
-        date: new Date().toISOString().split('T')[0]
+        flowerName: '', wholesalerId: '', quantity: '', unit: 'Kg',
+        pricePerUnit: '', paidAmount: ''
       });
       alert("Purchase saved successfully!");
     } catch (error) {
