@@ -209,7 +209,7 @@ export default function Sales() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">{t.amount} (₹)</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Paid Amount (₹)</label>
                   <input required type="number" step="0.01" value={formData.paidAmount} onChange={e => setFormData({...formData, paidAmount: e.target.value})} className="glass-input" />
                 </div>
                 <div>

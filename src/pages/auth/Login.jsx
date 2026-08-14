@@ -41,7 +41,7 @@ export default function Login() {
         
         <div className="relative z-10">
           <div className="flex flex-col items-center mb-8">
-            <img src="/logo.png" alt="Logo" className="w-20 h-20 object-contain mb-4 rounded-full shadow-lg border-2 border-mint-primary/20 bg-white" />
+            <img src="/floral.jpg" alt="Logo" className="w-20 h-20 object-contain mb-4 rounded-full shadow-lg border-2 border-mint-primary/20 bg-white" />
             <h1 className="text-2xl font-bold text-slate-800">Welcome Back</h1>
             <p className="text-slate-500 text-sm mt-1">Sign in to manage your shop</p>
           </div>
