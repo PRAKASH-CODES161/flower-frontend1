@@ -26,8 +26,14 @@ export default function Purchase() {
   }, []);
 
   const loadData = async () => {
-    setPurchases(await purchaseService.getAll());
-    setWholesalers(await wholesalerService.getAll());
+    const [purchasesData, stockData, wholesalersData] = await Promise.all([
+      purchaseService.getAll(),
+      stockService.getAll(),
+      wholesalerService.getAll()
+    ]);
+    setPurchases(purchasesData);
+    setStockItems(stockData);
+    setWholesalers(wholesalersData);
   };
 
   const handleSubmit = async (e) => {

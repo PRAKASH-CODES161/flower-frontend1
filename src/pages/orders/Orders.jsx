@@ -28,8 +28,12 @@ export default function Orders() {
   }, []);
 
   const loadData = async () => {
-    setOrders(await orderService.getAll());
-    setStockItems(await stockService.getAll());
+    const [ordersData, stockData] = await Promise.all([
+      orderService.getAll(),
+      stockService.getAll()
+    ]);
+    setOrders(ordersData);
+    setStockItems(stockData);
   };
 
   const handleSubmit = async (e) => {

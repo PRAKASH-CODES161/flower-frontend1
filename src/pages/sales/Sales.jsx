@@ -26,8 +26,12 @@ export default function Sales() {
   }, []);
 
   const loadData = async () => {
-    setSales(await salesService.getAll());
-    setStockItems(await stockService.getAll());
+    const [salesData, stockData] = await Promise.all([
+      salesService.getAll(),
+      stockService.getAll()
+    ]);
+    setSales(salesData);
+    setStockItems(stockData);
   };
 
   const getSelectedFlower = () => stockItems.find(s => (s._id || s.id) === formData.flowerId) || null;
