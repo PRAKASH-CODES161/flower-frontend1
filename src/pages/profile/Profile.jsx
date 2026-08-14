@@ -29,8 +29,9 @@ export default function Profile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (profile.id) {
-      await profileService.update(profile.id, profile);
+    const profileId = profile._id || profile.id;
+    if (profileId) {
+      await profileService.update(profileId, profile);
     } else {
       await profileService.create(profile);
     }

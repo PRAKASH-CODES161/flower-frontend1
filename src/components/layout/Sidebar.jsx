@@ -48,9 +48,9 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}>
         <div className="p-6 flex items-center gap-3">
-          <img src="/logo.png" alt="Flower Shop Logo" className="w-10 h-10 object-cover rounded-xl shadow-md bg-white p-1" />
+          <img src="/floral.jpg" alt="Floral Logo" className="w-10 h-10 object-cover rounded-xl shadow-md bg-white p-1" />
           <div>
-            <h2 className="text-lg font-bold text-slate-800 leading-tight">Flower Shop</h2>
+            <h2 className="text-lg font-bold text-slate-800 leading-tight">Floral</h2>
             <p className="text-xs text-mint-primary font-medium">Management System</p>
           </div>
         </div>
