@@ -26,15 +26,20 @@ export default function Expenses() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await expenseService.create({
-      expenseType: formData.expenseType,
-      description: formData.description,
-      amount: Number(formData.amount) || 0,
-      date: new Date(formData.date).toISOString()
-    });
-    await loadData();
-    setShowModal(false);
-    setFormData({ ...formData, description: '', amount: '' });
+    try {
+      await expenseService.create({
+        expenseType: formData.expenseType,
+        description: formData.description,
+        amount: Number(formData.amount) || 0,
+        date: new Date(formData.date).toISOString()
+      });
+      await loadData();
+      setShowModal(false);
+      setFormData({ ...formData, description: '', amount: '' });
+      alert("Expense saved successfully!");
+    } catch (error) {
+      alert(error.message || "Failed to save expense");
+    }
   };
 
   const handleDelete = async (id) => {

@@ -28,29 +28,34 @@ export default function Stock() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newItem = {
-      flowerName: formData.flowerName,
-      availableQuantity: Number(formData.availableQuantity) || 0,
-      unit: formData.unit,
-      purchasePrice: Number(formData.purchasePrice) || 0,
-      sellingPrice: Number(formData.sellingPrice) || 0,
-      minimumStockLevel: Number(formData.minimumStockLevel) || 10
-    };
-    
-    // Check if flower already exists
-    const existingStock = stockItems.find(s => s.flowerName.toLowerCase() === newItem.flowerName.toLowerCase());
-    if (existingStock) {
-      existingStock.availableQuantity = (Number(existingStock.availableQuantity) || 0) + newItem.availableQuantity;
-      existingStock.purchasePrice = newItem.purchasePrice || existingStock.purchasePrice;
-      existingStock.sellingPrice = newItem.sellingPrice || existingStock.sellingPrice;
-      await stockService.update(existingStock.id, existingStock);
-    } else {
-      await stockService.create(newItem);
-    }
+    try {
+      const newItem = {
+        flowerName: formData.flowerName,
+        availableQuantity: Number(formData.availableQuantity) || 0,
+        unit: formData.unit,
+        purchasePrice: Number(formData.purchasePrice) || 0,
+        sellingPrice: Number(formData.sellingPrice) || 0,
+        minimumStockLevel: Number(formData.minimumStockLevel) || 10
+      };
+      
+      // Check if flower already exists
+      const existingStock = stockItems.find(s => s.flowerName.toLowerCase() === newItem.flowerName.toLowerCase());
+      if (existingStock) {
+        existingStock.availableQuantity = (Number(existingStock.availableQuantity) || 0) + newItem.availableQuantity;
+        existingStock.purchasePrice = newItem.purchasePrice || existingStock.purchasePrice;
+        existingStock.sellingPrice = newItem.sellingPrice || existingStock.sellingPrice;
+        await stockService.update(existingStock.id || existingStock._id, existingStock);
+      } else {
+        await stockService.create(newItem);
+      }
 
-    await loadData();
-    setShowModal(false);
-    setFormData({ flowerName: '', availableQuantity: '', unit: 'Kg', purchasePrice: '', sellingPrice: '', minimumStockLevel: '10' });
+      await loadData();
+      setShowModal(false);
+      setFormData({ flowerName: '', availableQuantity: '', unit: 'Kg', purchasePrice: '', sellingPrice: '', minimumStockLevel: '10' });
+      alert("Stock saved successfully!");
+    } catch (error) {
+      alert(error.message || "Failed to save stock");
+    }
   };
 
   const filtered = stockItems.filter(s => s.flowerName.toLowerCase().includes(search.toLowerCase()));

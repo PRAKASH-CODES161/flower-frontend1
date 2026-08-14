@@ -46,13 +46,18 @@ export default function Wholesalers() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editingId) {
-      await wholesalerService.update(editingId, formData);
-    } else {
-      await wholesalerService.create(formData);
+    try {
+      if (editingId) {
+        await wholesalerService.update(editingId, formData);
+      } else {
+        await wholesalerService.create(formData);
+      }
+      await loadWholesalers();
+      handleCloseModal();
+      alert("Wholesaler saved successfully!");
+    } catch (error) {
+      alert(error.message || "Failed to save wholesaler");
     }
-    await loadWholesalers();
-    handleCloseModal();
   };
 
   const handleDelete = async (id) => {

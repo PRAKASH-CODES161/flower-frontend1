@@ -35,29 +35,32 @@ export default function Purchase() {
     const qty = Number(formData.quantity) || 0;
     const price = Number(formData.pricePerUnit) || 0;
     const totalAmount = qty * price;
-    const paidAmount = Number(formData.paidAmount) || 0;
-    const pendingAmount = totalAmount - paidAmount;
-    
-    const selectedWholesaler = wholesalers.find(w => w.id === formData.wholesalerId);
-    const wholesalerName = selectedWholesaler ? selectedWholesaler.name : 'Unknown';
+    try {
+      if (!formData.flowerId || !formData.wholesalerId) {
+        return alert("Please select a flower and wholesaler");
+      }
 
-    const newItem = {
-      wholesalerId: formData.wholesalerId,
-      wholesalerName: wholesalerName,
-      flowerName: formData.flowerName,
-      quantity: qty,
-      unit: formData.unit,
-      pricePerUnit: price,
-      totalAmount: totalAmount,
-      paidAmount: paidAmount,
-      pendingAmount: pendingAmount,
-      date: new Date().toISOString()
-    };
-    
-    await purchaseService.create(newItem);
-    await loadData();
-    setShowModal(false);
-    setFormData({ wholesalerId: '', flowerName: '', quantity: '', unit: 'Kg', pricePerUnit: '', paidAmount: '' });
+      await purchaseService.create({
+        flowerId: formData.flowerId,
+        wholesalerId: formData.wholesalerId,
+        quantity: Number(formData.quantity) || 0,
+        unit: formData.unit,
+        purchasePrice: Number(formData.purchasePrice) || 0,
+        sellingPrice: Number(formData.sellingPrice) || 0,
+        totalAmount: Number(formData.totalAmount) || 0,
+        date: new Date(formData.date).toISOString()
+      });
+      await loadData();
+      setShowModal(false);
+      setFormData({
+        flowerId: '', wholesalerId: '', quantity: '', unit: 'kg',
+        purchasePrice: '', sellingPrice: '', totalAmount: '', paidAmount: '',
+        date: new Date().toISOString().split('T')[0]
+      });
+      alert("Purchase saved successfully!");
+    } catch (error) {
+      alert(error.message || "Failed to save purchase");
+    }
   };
 
   const filtered = purchases.filter(p => 

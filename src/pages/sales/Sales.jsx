@@ -34,38 +34,43 @@ export default function Sales() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const flower = getSelectedFlower();
-    if (!flower) return alert('Select a flower');
+    try {
+      const flower = getSelectedFlower();
+      if (!flower) return alert('Select a flower');
 
-    const qty = Number(formData.quantity) || 0;
-    if (qty > flower.availableQuantity) {
-      return alert(`Insufficient stock! Only ${flower.availableQuantity} ${flower.unit} available.`);
+      const qty = Number(formData.quantity) || 0;
+      if (qty > flower.availableQuantity) {
+        return alert(`Insufficient stock! Only ${flower.availableQuantity} ${flower.unit} available.`);
+      }
+
+      const subtotal = qty * flower.sellingPrice;
+      const discount = Number(formData.discount) || 0;
+      const totalAmount = subtotal;
+      const finalAmount = subtotal - discount;
+      const paidAmount = Number(formData.paidAmount) || 0;
+
+      // Record sale matching backend expectation
+      await salesService.create({
+        customerName: formData.customerName || 'Walk-in Customer',
+        mobileNumber: formData.customerMobile, // Backend expects mobileNumber
+        date: new Date().toISOString(),
+        totalAmount,
+        discount,
+        finalAmount, // Backend expects finalAmount
+        items: [{
+          flowerId: formData.flowerId,
+          quantity: qty,
+          sellingPrice: flower.sellingPrice
+        }]
+      });
+
+      await loadData();
+      setShowModal(false);
+      setFormData({ customerName: '', customerMobile: '', flowerId: '', quantity: '', discount: '', paidAmount: '', paymentMethod: 'Cash' });
+      alert("Sale saved successfully!");
+    } catch (error) {
+      alert(error.message || "Failed to save sale");
     }
-
-    const subtotal = qty * flower.sellingPrice;
-    const discount = Number(formData.discount) || 0;
-    const totalAmount = subtotal - discount;
-    const paidAmount = Number(formData.paidAmount) || 0;
-    const balanceAmount = Math.max(0, totalAmount - paidAmount);
-
-    // Record sale
-    await salesService.create({
-      billNumber: 'INV-' + Math.floor(Math.random() * 9000 + 1000),
-      customerName: formData.customerName || 'Walk-in Customer',
-      customerMobile: formData.customerMobile,
-      flowerId: formData.flowerId,
-      quantity: qty,
-      totalAmount,
-      discount,
-      paidAmount,
-      balanceAmount,
-      paymentMethod: formData.paymentMethod,
-      date: new Date().toISOString()
-    });
-
-    await loadData();
-    setShowModal(false);
-    setFormData({ customerName: '', customerMobile: '', flowerId: '', quantity: '', discount: '', paidAmount: '', paymentMethod: 'Cash' });
   };
 
   const filtered = sales.filter(s => 
